@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Coding Rookie — Intertemporal Choice Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --clr-bg: #0c0f14;
+      --clr-surface: #141820;
+      --clr-surface-2: #1b2029;
+      --clr-border: #252b37;
+      --clr-text: #d4d8e0;
+      --clr-text-muted: #8891a0;
+      --clr-heading: #f0f2f5;
+      --clr-accent: #2dd4a8;
+      --clr-accent-dim: rgba(45, 212, 168, 0.12);
+      --clr-accent-2: #5b8def;
+      --clr-accent-2-dim: rgba(91, 141, 239, 0.12);
+      --clr-warm: #f4a261;
+      --clr-warm-dim: rgba(244, 162, 97, 0.12);
+      --clr-red: #e76f51;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'IBM Plex Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --max-w: 960px;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--clr-text);
+      background: var(--clr-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(12, 15, 20, 0.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--clr-border);
+    }
+    nav .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    nav .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--clr-accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    nav .nav-links { display: flex; gap: 1.5rem; }
+    nav .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--clr-text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav .nav-links a:hover { color: var(--clr-heading); }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -200px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(45, 212, 168, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero .badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clr-accent);
+      background: var(--clr-accent-dim);
+      border: 1px solid rgba(45, 212, 168, 0.18);
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      color: var(--clr-heading);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--clr-text-muted);
+      max-width: 620px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .hero-stats .stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .hero-stats .stat-value {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--clr-heading);
+    }
+    .hero-stats .stat-label {
+      font-size: 0.78rem;
+      color: var(--clr-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SECTIONS ─────────────────────────────────────── */
+    section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    section + section {
+      border-top: 1px solid var(--clr-border);
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clr-accent);
+      margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      color: var(--clr-heading);
+      margin-bottom: 1rem;
+    }
+    h3 {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--clr-heading);
+      margin-top: 2.5rem;
+      margin-bottom: 0.6rem;
+    }
+    p { margin-bottom: 1rem; }
+    p + .chart-card { margin-top: 1.5rem; }
+
+    /* ── CHART CARD ──────────────────────────────────── */
+    .chart-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .chart-card .chart-header {
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--clr-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chart-card .chart-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--clr-heading);
+    }
+    .chart-card .chart-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--clr-text-muted);
+      background: var(--clr-surface-2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+    .chart-card .chart-body {
+      padding: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+    }
+    .chart-card .chart-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+    /* Placeholder state — remove this class once you drop in real images */
+    .chart-card .chart-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      color: var(--clr-text-muted);
+      font-size: 0.85rem;
+      min-height: 260px;
+      width: 100%;
+      border: 2px dashed var(--clr-border);
+      border-radius: 8px;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.008) 10px,
+        rgba(255,255,255,0.008) 20px
+      );
+    }
+    .chart-placeholder code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--clr-surface-2);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      color: var(--clr-accent);
+    }
+    .chart-card .chart-caption {
+      padding: 0.8rem 1.4rem;
+      border-top: 1px solid var(--clr-border);
+      font-size: 0.82rem;
+      color: var(--clr-text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── INSIGHT CALLOUT ─────────────────────────────── */
+    .insight {
+      background: var(--clr-accent-dim);
+      border-left: 3px solid var(--clr-accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.1rem 1.4rem;
+      margin: 1.5rem 0 2rem;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+    .insight strong {
+      color: var(--clr-accent);
+      font-weight: 600;
+    }
+    .insight-warm {
+      background: var(--clr-warm-dim);
+      border-left-color: var(--clr-warm);
+    }
+    .insight-warm strong { color: var(--clr-warm); }
+    .insight-blue {
+      background: var(--clr-accent-2-dim);
+      border-left-color: var(--clr-accent-2);
+    }
+    .insight-blue strong { color: var(--clr-accent-2); }
+
+    /* ── PIPELINE STEPS ──────────────────────────────── */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+    .pipeline-step {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+    }
+    .pipeline-step .step-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--clr-accent);
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.06em;
+    }
+    .pipeline-step .step-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--clr-heading);
+      margin-bottom: 0.3rem;
+    }
+    .pipeline-step .step-desc {
+      font-size: 0.8rem;
+      color: var(--clr-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── KEY METRIC ROW ──────────────────────────────── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+    .metric-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .metric-card .metric-val {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--clr-accent);
+    }
+    .metric-card .metric-label {
+      font-size: 0.78rem;
+      color: var(--clr-text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── RECOMMENDATIONS ─────────────────────────────── */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .rec-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+    }
+    .rec-card .rec-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+    }
+    .rec-card .rec-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--clr-heading);
+      margin-bottom: 0.5rem;
+    }
+    .rec-card .rec-desc {
+      font-size: 0.84rem;
+      color: var(--clr-text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 2rem 2rem 3rem;
+      border-top: 1px solid var(--clr-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer .footer-left {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--clr-text-muted);
+    }
+    footer .footer-right {
+      font-size: 0.78rem;
+      color: var(--clr-text-muted);
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 4rem 1.2rem 2.5rem; }
+      section { padding: 2.5rem 1.2rem; }
+      .hero-stats { gap: 1.5rem; }
+      nav .nav-links { gap: 1rem; }
+      nav .nav-links a { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Team Coding Rookie</div>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#cleaning">Cleaning</a>
+      <a href="#findings">Findings</a>
+      <a href="#features">Features</a>
+      <a href="#recommendations">Takeaways</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ HERO ══════════════════════════ -->
+<header class="hero">
+  <div class="badge fade-in">Data Hackathon 2026</div>
+  <h1 class="fade-in delay-1">Now or Later?<br/>Decoding <em>Intertemporal Choice</em></h1>
+  <p class="subtitle fade-in delay-2">
+    A large-scale analysis of when and why people choose smaller-sooner rewards
+    over larger-later ones — and what drives that decision.
+  </p>
+  <div class="hero-stats fade-in delay-3">
+    <div class="stat">
+      <span class="stat-value">800k+</span>
+      <span class="stat-label">Trials analyzed</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">20+</span>
+      <span class="stat-label">Countries</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">~1.29×</span>
+      <span class="stat-label">Tipping ratio</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">12</span>
+      <span class="stat-label">Features ranked</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════ OVERVIEW ══════════════════════════ -->
+<section id="overview">
+  <div class="section-label">01 — Overview</div>
+  <h2>The Problem</h2>
+  <p>
+    Intertemporal choice — the trade-off between a smaller, sooner reward (SS) and a larger, later one (LL) —
+    is fundamental to decisions in finance, health, and product design. We analyzed a large
+    multi-study dataset to uncover the key factors driving these choices, identify tipping points,
+    and derive actionable design recommendations.
+  </p>
+  <div class="insight">
+    <strong>Core question:</strong> What makes people willing to wait for a bigger reward —
+    and how large does the incentive gap need to be before they switch from "now" to "later"?
+  </div>
+</section>
+
+<!-- ═══════════════════ DATA CLEANING ═════════════════════════ -->
+<section id="cleaning">
+  <div class="section-label">02 — Data Cleaning</div>
+  <h2>Preparing the Dataset</h2>
+  <p>
+    Raw data spanned multiple studies with heterogeneous formats. Our cleaning pipeline enforced
+    consistent typing, removed flagged exclusions, and preserved data richness while controlling outliers.
+  </p>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num">Step 01</div>
+      <div class="step-title">Type Enforcement</div>
+      <div class="step-desc">Coerced choice to binary 0/1, numeric columns to float, trimmed string IDs.</div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Step 02</div>
+      <div class="step-title">Missing Values</div>
+      <div class="step-desc">Dropped rows missing core columns: SS/LL values and times.</div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Step 03</div>
+      <div class="step-title">RT Outliers</div>
+      <div class="step-desc">Winsorized response times at the 99.5th percentile — capped, not deleted.</div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Step 04</div>
+      <div class="step-title">Exclusions</div>
+      <div class="step-desc">Removed subject- and trial-level exclusions flagged by original study authors.</div>
+    </div>
+  </div>
+
+  <div class="insight insight-blue">
+    <strong>Design choice:</strong> We winsorized RT rather than dropping extreme rows, preserving
+    data richness while reducing the impact of outliers on downstream analysis.
+  </div>
+</section>
+
+<!-- ═══════════════════ KEY FINDINGS ══════════════════════════ -->
+<section id="findings">
+  <div class="section-label">03 — Key Findings</div>
+  <h2>What the Data Tells Us</h2>
+
+  <!-- ── Q1: Delay distributions ── -->
+  <h3>Delay Structure: What's the Typical Trade-Off?</h3>
+  <p>
+    Most SS options are immediate (81% at 0 days), while LL delays center around ~30 days.
+    The typical trial presents a "now vs. one month" trade-off, though extreme outliers exist in both tails.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">SS vs LL Delay Distributions</span>
+      <span class="chart-tag">Q1</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: swap the placeholder div below with: <img src="images/plot_01_delay_distribution.png" alt="Delay distributions" /> -->
+      <img src="images/plot_01_delay_distribution.png" alt="Delay distributions" />
+      <!-- <div class="chart-placeholder">
+        <span>📊</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_01_delay_distribution.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      Top: count of trials per delay bucket (SS mostly "Today"; LL peaks at ≤ 1 month).
+      Bottom: boxplots of raw delay in days, capped at 400 for readability.
+    </div>
+  </div>
+
+  <!-- ── Q2: Choice split ── -->
+  <h3>Overall Choice Distribution</h3>
+  <p>
+    Across all trials, the dataset is roughly balanced between SS and LL choices, indicating
+    no extreme global bias toward patience or impatience.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">SS vs LL Choice Split</span>
+      <span class="chart-tag">Q2</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_choice_distribution.png" alt="Choice distribution" /> -->
+      <img src="images/plot_choice_distribution.png" alt="Choice distribution" />
+      <!-- <div class="chart-placeholder">
+        <span>🥧</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_choice_distribution.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- ── Q3: Reward ratio ── -->
+  <h3>The Tipping Point: How Big Must the Reward Gap Be?</h3>
+  <p>
+    We computed the reward ratio (LL value ÷ SS value) and binned it into deciles. The LL choice rate
+    climbs steadily — crossing the 50% mark at approximately <strong>1.29×</strong>. Below that, most people
+    take the immediate option; above it, patience wins.
+  </p>
+
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-val">~1.29×</div>
+      <div class="metric-label">Tipping ratio (LL ≥ 50%)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" style="color: var(--clr-accent-2);">↑ Monotonic</div>
+      <div class="metric-label">LL rate trend with ratio</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" style="color: var(--clr-warm);">~2.0</div>
+      <div class="metric-label">Median reward ratio</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">LL Rate vs Reward Ratio &amp; Ratio by Choice</span>
+      <span class="chart-tag">Q3</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_reward_ratio.png" alt="Reward ratio analysis" /> -->
+      <img src="images/plot_reward_ratio.png" alt="Reward ratio analysis" />
+      <!-- <div class="chart-placeholder">
+        <span>📈</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_reward_ratio.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      Left: LL choice rate (%) rising with reward ratio bin midpoint.
+      Right: boxplot confirming LL choices cluster at higher ratios than SS choices.
+    </div>
+  </div>
+
+  <div class="insight insight-warm">
+    <strong>Business implication:</strong> Users need the larger-later option to be at least
+    ~29% more valuable before they'll choose to wait. Design upgrade offers accordingly — a thin
+    value gap loses to the immediate option.
+  </div>
+
+  <!-- ── Q4: Country ── -->
+  <h3>Geographic Variation</h3>
+  <p>
+    LL choice rates vary meaningfully across countries (filtered to n&gt;500 trials each).
+    However, country is a coarse proxy — experimental design, sample demographics, and study context differ
+    across geographies, so these differences should not be interpreted as pure cultural effects.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">LL Choice Rate by Country</span>
+      <span class="chart-tag">Q4</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_country_vs_choice.png" alt="Country analysis" /> -->
+      <img src="images/plot_country_vs_choice.png" alt="Country analysis" />
+      <!-- <div class="chart-placeholder">
+        <span>🌍</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_country_vs_choice.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- ── Q5: Age ── -->
+  <h3>Age &amp; Decision Behavior</h3>
+  <p>
+    We binned participants into granular age groups to avoid hiding real distributional patterns.
+    Younger adults show faster, more consistent response times, while older adults are slower and more variable.
+    The relationship between age and patience (LL rate) is non-linear.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">LL Choice Rate by Age Group</span>
+      <span class="chart-tag">Q5a</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_age_choice.png" alt="Age vs choice" /> -->
+      <img src="images/plot_age_choice.png" alt="Age vs choice" />
+      <!-- <div class="chart-placeholder">
+        <span>👥</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_age_choice.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Response Time Distribution by Age Group</span>
+      <span class="chart-tag">Q5b</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_rt_by_age.png" alt="RT by age group" /> -->
+      <img src="images/plot_rt_by_age.png" alt="RT by age group" />
+      <!-- <div class="chart-placeholder">
+        <span>⏱️</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_rt_by_age.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      Speed slows with age and consistency decreases — older groups include both fast and very slow responders.
+    </div>
+  </div>
+
+  <!-- ── Q6: RT vs Reward ratio ── -->
+  <h3>Does Difficulty Slow People Down?</h3>
+  <p>
+    We tested whether higher reward ratios (easier decisions) lead to faster responses.
+    The correlation is negligible — response time appears largely independent of the reward gap in this dataset.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Response Time vs Reward Ratio</span>
+      <span class="chart-tag">Q6</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_rt_vs_ratio.png" alt="RT vs reward ratio" /> -->
+      <img src="images/plot_rt_vs_ratio.png" alt="RT vs reward ratio" />
+      <!-- <div class="chart-placeholder">
+        <span>🔬</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_rt_vs_ratio.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- ── Q7: Context variables ── -->
+  <h3>Context Matters: Procedure, Incentives &amp; Setting</h3>
+  <p>
+    Task type (procedure) showed the largest spread in LL rates — roughly 30 percentage points across categories.
+    Online vs. in-lab produced a smaller but real ~8pp gap. Incentive framing had minimal impact (~4pp).
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Context Variables vs Patience</span>
+      <span class="chart-tag">Q7</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_context_patience.png" alt="Context variables" /> -->
+      <img src="images/plot_context_patience.png" alt="Context variables" />
+      <!-- <div class="chart-placeholder">
+        <span>🧪</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_context_patience.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      Procedure dominates observed patience differences. Online settings trend slightly more impatient.
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Time Pressure Effects</span>
+      <span class="chart-tag">Q7b</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_time_pressure.png" alt="Time pressure" /> -->
+      <img src="images/plot_time_pressure.png" alt="Time pressure" />
+      <!-- <div class="chart-placeholder">
+        <span>⏳</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_time_pressure.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Presentation of Information vs Choice</span>
+      <span class="chart-tag">Q7c</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_presentation.png" alt="Presentation format" /> -->
+      <img src="images/plot_presentation.png" alt="Presentation format" />
+      <!-- <div class="chart-placeholder">
+        <span>📋</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_presentation.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="insight">
+    <strong>Practical takeaway:</strong> Before claiming segment differences in patience,
+    experiment format and channel context must be controlled or disclosed — task design
+    drives more variation than individual traits in this dataset.
+  </div>
+</section>
+
+<!-- ═══════════════════ FEATURE RANKING ═══════════════════════ -->
+<section id="features">
+  <div class="section-label">04 — Feature Importance</div>
+  <h2>What Predicts Choice?</h2>
+  <p>
+    We ranked all available features by mutual information (MI) with the binary SS/LL choice.
+    MI captures any statistical association — including non-linear relationships — making it a good
+    first-pass ranking before modeling.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Mutual Information Ranking</span>
+      <span class="chart-tag">Q8</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_mi_ranking.png" alt="MI feature ranking" /> -->
+      <img src="images/plot_mi_ranking.png" alt="MI feature ranking" />
+      <!-- <div class="chart-placeholder">
+        <span>🏆</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_mi_ranking.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      Reward amounts and delays rank highest (expected — they define the task). Context variables like
+      procedure and incentivization matter for fair cross-study comparisons.
+    </div>
+  </div>
+
+  <div class="insight insight-blue">
+    <strong>Interpretation note:</strong> High MI for reward amounts partly reflects task structure
+    (every trial varies these quantities). Context variables with lower MI can still be critical
+    for causal interpretation and study design.
+  </div>
+</section>
+
+<!-- ═══════════════════ RECOMMENDATIONS ═══════════════════════ -->
+<section id="recommendations">
+  <div class="section-label">05 — Recommendations</div>
+  <h2>Actionable Takeaways</h2>
+
+  <div class="rec-grid">
+    <div class="rec-card">
+      <div class="rec-icon">🎯</div>
+      <div class="rec-title">Design Around the 1.29× Threshold</div>
+      <div class="rec-desc">
+        Upgrade or premium offers need to deliver at least ~29% more perceived value than the immediate
+        option. Below this, most users default to "now."
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-icon">🧪</div>
+      <div class="rec-title">Control for Task Format</div>
+      <div class="rec-desc">
+        Procedure type explains more variance in patience than demographics. When comparing user segments,
+        hold the choice presentation constant.
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-icon">📱</div>
+      <div class="rec-title">Channel Awareness</div>
+      <div class="rec-desc">
+        Online settings trend slightly more impatient (~8pp). Digital product teams should account for
+        this when benchmarking against lab-derived thresholds.
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-icon">👤</div>
+      <div class="rec-title">Age-Sensitive Design</div>
+      <div class="rec-desc">
+        Older users respond slower and more variably. Time-limited offers may disproportionately push
+        them toward the immediate option — consider adaptive timeouts.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ════════════════════════════ -->
+<footer>
+  <div class="footer-left">© 2026 Team Coding Rookie - Data Hackathon</div>
+  <div class="footer-right">Built with Python · pandas · seaborn · sklearn</div>
+</footer>
+
+<!-- Scroll-triggered fade-in for sections -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('section, .chart-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
